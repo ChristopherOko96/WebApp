@@ -54,6 +54,7 @@ function sendMessage() {
     if (chatMessage.trim() !== "") {
         const messageElement = document.createElement("div");
         messageElement.textContent = "Du: " + chatMessage;
+        messageElement.classList.add("chat-message");
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
         document.getElementById("chatMessage").value = "";

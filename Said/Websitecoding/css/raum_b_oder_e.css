@@ -158,10 +158,11 @@ button:hover {
 }
 .chat-box {
     flex: 1;
-    padding: 200px;
+    padding: 20px;
     overflow-y: auto;
     background-color: lightgray;
     border: 1px solid #ccc;
+
 }
 
 .chat-input {
@@ -193,6 +194,17 @@ button:hover {
     transform: rotate3d(50,1,100,300deg);
     cursor: pointer;
 }
+
+.chat-message {
+    border: 1px solid black;      
+    border-radius: 8px;           
+    padding: 8px;                 
+    margin-bottom: 5px;           
+    max-width: fit-content;              
+    background-color: green;   
+    width: -webkit-fill-available;
+}
+
 /*video*/
 .video-grid {
     display: grid;
