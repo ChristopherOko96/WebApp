@@ -25,3 +25,37 @@ function logout() {
     alert('Abmelden...');
     showPage('homePage'); // Zurück zur Hauptseite nach dem Abmelden
 }
+
+// Video- und Chatfunktionen
+function toggleMic() {
+    alert("Mikrofon an/aus");
+    // Logik zum Aktivieren/Deaktivieren des Mikrofons hinzufügen
+}
+
+function toggleVideo() {
+    alert("Video an/aus");
+    // Logik zum Aktivieren/Deaktivieren des Videos hinzufügen
+}
+
+function shareScreen() {
+    alert("Bildschirmfreigabe starten/beenden");
+    // Logik zum Teilen des Bildschirms hinzufügen
+}
+
+function endCall() {
+    alert("Anruf beenden");
+    showPage('homePage');
+}
+
+// Chatfunktion
+function sendMessage() {
+    const chatBox = document.getElementById("chatBox");
+    const chatMessage = document.getElementById("chatMessage").value;
+    if (chatMessage.trim() !== "") {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = "Du: " + chatMessage;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        document.getElementById("chatMessage").value = "";
+    }
+}

@@ -68,18 +68,34 @@
 
         <!-- Raumansicht mit Chat und Video -->
         <div id="roomPage" class="page">
-            <div class="body-left">
+            <div class="body-left chat-section">
                 <h2>Chatbereich</h2>
                 <div class="chat-box">
                     <!-- Chat-Inhalte -->
                 </div>
+                <div class="chat-input">
+                    <input type="text" id="chatMessage" placeholder="Nachricht eingeben">
+                    <button onclick="sendMessage()">➤</button>
+                </div>
             </div>
-            <div class="body-right">
+            <div class="body-right video-section">
                 <h2>Videobereich</h2>
                 <div class="video-grid">
                     <!-- Video-Kacheln -->
+                    <div class="video-tile"></div>
+                    <div class="video-tile"></div>
+                    <div class="video-tile"></div>
+                    <div class="video-tile"></div>
+                    <div class="video-tile"></div>
+                    <div class="video-tile"></div>
                 </div>
-                <button onclick="leaveRoom()">Raum Verlassen</button>
+                <div class="controls">
+                    <button onclick="toggleMic()">🎤</button>
+                    <button onclick="toggleVideo()">📹</button>
+                    <button onclick="shareScreen()">🖥️</button>
+                    <button id="cancelCall" onclick="endCall()">📞</button>
+                </div>
+                <!-- <button onclick="leaveRoom()">Raum Verlassen</button> -->
             </div>
         </div>
     </div>
