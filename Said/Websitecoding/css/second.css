@@ -22,6 +22,11 @@ body {
     font-weight: bold;
 }
 
+.name #name:hover{
+    color: red;
+    cursor: pointer;
+}
+
 .nav a {
     color: white;
     text-decoration: none;

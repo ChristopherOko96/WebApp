@@ -14,7 +14,7 @@
             <a target="" href="secondpage.html" id="name">ConnectNow</a>
         </div>
         <nav class="nav">
-            <span id="username">Max Mustermann</span>
+            <span id="username" > MaxMustermann</span>
             <a href="secondpage.html">Abmelden</a>
         </nav>
     </header>
@@ -101,5 +101,20 @@
     </div>
 
     <script src="script2.js"></script>
+    <script>
+        // Beim Laden der Seite den Benutzernamen aus dem localStorage holen und anzeigen
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username");
+            if (username) {
+                document.getElementById("username").textContent = username;
+            }
+        });
+
+        // Funktion zum Abmelden
+        function logout() {
+            localStorage.removeItem("username"); // Benutzername aus localStorage löschen
+            window.location.href = "secondpage.html"; // Zurück zur Login-Seite
+        }
+    </script>
 </body>
 </html>

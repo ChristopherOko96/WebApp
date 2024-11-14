@@ -37,7 +37,7 @@
             <input id="loginMail" type="email" placeholder="E-Mail">
             <p>Passwort</p>
             <input id="loginPass" type="password" placeholder="Passwort">
-            <a target="" href="raum_b_oder_e.html" onclick=" readData('loginMail','loginPass')">Login</a>
+            <a target="" href="raum_b_oder_e.html" onclick=" readData('loginMail','loginPass'), saveUsername()">Login</a>
         </div>
     </div>
 
@@ -48,11 +48,22 @@
             <input id="registerMail" type="email" placeholder="E-Mail">
             <p>Passwort</p>
             <input id="registerPass" type="password" placeholder="Passwort">
-            <a target="" href="raum_b_oder_e.html" onclick=" readData('registerMail','registerPass')">Registrieren</a>
+            <a target="" href="raum_b_oder_e.html" onclick=" readData('registerMail','registerPass'), saveUsername()">Registrieren</a>
         </div>
     </div>
 
 
     <script src="script.js"></script>
+    <script>
+        function saveUsername() {
+            const username = document.getElementById("loginMail").value;
+            if (username.trim() !== "") {
+                localStorage.setItem("username", username); // Benutzername speichern
+                window.location.href = "raum_b_oder_e.html"; // Zur nächsten Seite navigieren
+            } else {
+                alert("Bitte geben Sie einen Benutzernamen ein.");
+            }
+        }
+    </script>
 </body>
 </html>

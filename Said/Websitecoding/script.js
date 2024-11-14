@@ -23,4 +23,6 @@ function readData(mail, passwort){
     const passwortInhalt = document.getElementById(passwort).value;
     console.log(mailInhalt);
     console.log(passwortInhalt);
+
+    return mailInhalt,passwortInhalt;
 }

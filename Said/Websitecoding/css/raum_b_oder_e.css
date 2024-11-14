@@ -22,6 +22,10 @@ body, html {
     color: #007bff; 
     font-weight: bold;
 }
+.name #name:hover{
+    color: red;
+    cursor: pointer;
+}
 
 .nav {
     display: flex;
