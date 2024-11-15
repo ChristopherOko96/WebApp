@@ -60,3 +60,9 @@ function sendMessage() {
         document.getElementById("chatMessage").value = "";
     }
 }
+document.getElementById("chatMessage").addEventListener("keydown",function(event){
+    if(event.key == "Enter"){
+        event.preventDefault();
+        sendMessage();
+    }
+});
