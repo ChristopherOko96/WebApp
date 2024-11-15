@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Now RealTime Conferencing</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header class="header-main"> 
+        <div class="name">
+            <a target="" href="#" id="name" onclick="showPage('afterLogin')">ConnectNow</a>
+        </div>
+        <nav class="nav">
+            <span id="username" style="display: none;"></span>
+            <a  id="abmeldeButton" onclick="logout()" style="display: none;">Abmelden</a>
+        </nav>
+    </header>
+
+    <div id="homePage" class="page active">
+        <div class="body-left">
+            <h1>Willkommen</h1>
+        </div>
+        <div class="body-right">
+            <div class="login-container">
+                <button onclick="showPage('loginPage')">Anmelden</button>
+                <button onclick="showPage('registerPage')">Registrieren</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="afterLogin" class="page">
+        <div class="body-left">
+            <h1>Willkommen</h1>
+            <div>
+                <span id="usernameUnterWilkommen" style="display: none;"></span>
+            </div>
+        </div>
+        <div class="body-right">
+            <div class="login-container">
+                <button onclick="showPage('createPage')">Raum-Erstellen</button>
+                <button onclick="showPage('joinPage')">Raum-Beitreten</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginPage" class="page">
+        <h2>Anmelden</h2>
+        <div class="login-data-input">
+            <p>Benutzername</p>
+            <input id="usernameInputFeld" type="text" placeholder="Benutzername eintippen...">
+            <p>Email</p>
+            <input id="loginMail" type="email" placeholder="E-Mail">
+            <p>Passwort</p>
+            <input id="loginPass" type="password" placeholder="Passwort">
+            <button onclick="loginUser()">Login</button>
+        </div>
+    </div>
+
+    <div id="registerPage" class="page">
+        <h2>Registrieren</h2>
+        <div class="login-data-input">
+            <p>Benutzername</p>
+            <input id="usernameInputFeldReg" type="text" placeholder="Benutzername eintippen...">
+            <p>Email</p>
+            <input id="registerMail" type="email" placeholder="E-Mail">
+            <p>Passwort</p>
+            <input id="registerPass" type="password" placeholder="Passwort">
+            <button onclick="registerUser()">Registrieren</button>
+        </div>
+    </div>
+
+    <div id="createPage" class="page">
+        <div class="body-left">
+            <h1>Raum erstellen</h1>
+        </div>
+        <div class="body-right">
+            <div class="creatingContainer">
+                <p>Passwort</p>
+                <input id="roomPassword" type="password" placeholder="Passwort">
+                <button onclick="enterRoom('create')">Raum Erstellen</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="joinPage" class="page">
+        <div class="body-left">
+            <h1>Raum beitreten</h1>
+        </div>
+        <div class="body-right">
+            <div class="creatingContainer">
+                <p>Raum ID</p>
+                <input id="joinRoomID" type="text" placeholder="Raum ID">
+                <p>Passwort</p>
+                <input id="joinRoomPassword" type="password" placeholder="Passwort">
+                <button onclick="enterRoom('join')">Raum Beitreten</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="roomPage" class="page">
+        <div class="body-left chat-section">
+            <h2>Chatbereich</h2>
+            <div id="chatBox" class="chat-box">
+                <!-- Chat-Inhalte -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatMessage" placeholder="Nachricht eingeben">
+                <button onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+        <div class="body-right video-section">
+            <h2>Videobereich</h2>
+            <div class="video-grid">
+                <div class="video-tile"></div>
+                <div class="video-tile"></div>
+                <div class="video-tile"></div>
+                <div class="video-tile"></div>
+                <div class="video-tile"></div>
+                <div class="video-tile"></div>
+            </div>
+            <div class="controls">
+                <button onclick="toggleMic()">🎤</button>
+                <button onclick="toggleVideo()">📹</button>
+                <button onclick="shareScreen()">🖥️</button>
+                <button id="cancelCall" onclick="endCall()">📞</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hauptcontainer für alle Seiten -->
+
+    <!-- Anmeldeseite -->
+    <!-- Registrierungsseite -->
+    <!-- Raum-Erstellen/Beitreten-Seite -->
+    <!-- Raum-Erstellen-Seite -->
+    <!-- Raum-Beitreten-Seite -->
+    <!-- Raumansicht mit Chat und Video -->
+
+
+
+    <script src="script.js"></script>
+    <script>
+    
+        function logout() {
+            localStorage.removeItem("username");
+            document.getElementById("username").style.display = "none";
+            localStorage.removeItem("usernameUnterWilkommen");
+            document.getElementById("usernameUnterWilkommen").style.display = "none";
+            document.getElementById("abmeldeButton").style.display="none";
+            showPage('homePage');
+        }
+
+        function loginUser() {
+            const username = document.getElementById("usernameInputFeld").value;
+            const mailadresse = document.getElementById("loginMail").value;
+            if (username != "" && mailadresse != "") {
+                document.getElementById("username").textContent = username;
+                document.getElementById("username").style.display = "inline";
+                document.getElementById("usernameUnterWilkommen").textContent = username;
+                document.getElementById("usernameUnterWilkommen").style.display = "inline";
+                document.getElementById("abmeldeButton").style.display="inline";
+
+                showPage('afterLogin');
+            }else{
+                
+                alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
+            }
+
+            
+        }
+
+        function registerUser() {
+            const username = document.getElementById("usernameInputFeldReg").value;
+            const mailadresse = document.getElementById("registerMail").value;
+            if (username != "" && mailadresse != "") {
+                document.getElementById("username").textContent = username;
+                document.getElementById("username").style.display = "inline";
+                document.getElementById("usernameUnterWilkommen").textContent = username;
+                document.getElementById("usernameUnterWilkommen").style.display = "inline";
+                document.getElementById("abmeldeButton").style.display="inline";
+
+                showPage('afterLogin');
+            }else{
+                
+                alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
+            }
+
+        }
+    </script>
+</body>
+</html>
