@@ -8,14 +8,19 @@
 
 
 // Lädt das eingebaute "path"-Modul, das Funktionen zum Arbeiten mit Dateipfaden bietet.
- const path =require("path")
+ const path =require("path");
+const { nextTick } = require("process");
+const { SourceTextModule } = require("vm");
 
  //es wird eine Instanz des Express aufgesetzt
  const app= express(); 
 
 //Stellt statische Dateien aus dem Ordner "public" bereit, z. B. für CSS, JS, Bilder.
 //man kann die html datei besser verküpfen guck index.html durch . ist es im root
- app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "..", "..", "Said", "Websitecoding")));
+
+ 
+
 
 
  /*der erste Parameter gibt an an welche verzeichnis er es schicken soll
@@ -43,32 +48,31 @@ app.get("/",(req,res,next) =>{
    next();
 })
 
-app.get("/",(req,res,next) =>{
-   res.send("<h1>hallo wie gehts </h1>")
-})
+app.get("/", (req, res) => {
+   res.sendFile(path.join(__dirname,"..","..", "Said","Websitecoding", "index.html"));
+  
+});
 
- app.get("/users/",(req,res) =>{
-    console.log("users: "+res.locals.validateUsers)
-    res.send("<h1> Hallo get Users</h1>");
- }); 
 
- //Create
- app.post("*",(req,res) =>{   
-    console.log("Ip addresse: "+req.ip)
-    res.send("<h1> Hallo post Express</h1>");
- }); 
 
-//Update
- app.put("*",(req,res) =>{   
-    console.log("Ip addresse: "+req.ip)
-    res.send("<h1> Hallo put Express</h1>");
- });
 
-//Delete
- app.delete("*",(req,res) =>{   
-    console.log("Ip addresse: "+req.ip)
-    res.send("<h1> Hallo delete Express</h1>");
- });  
+
+app.use(express.urlencoded({ extended: true })); // Für URL-codierte Daten (Formulardaten)
+app.use(express.json()); // Für JSON-Daten
+
+// Route für das Login
+app.post('/login', (req, res) => {
+   const { username, password } = req.body; // Extrahiert Benutzername und Passwort
+   console.log("hallo");
+   console.log('loginMail:', req.body.username);
+   console.log('loginPass:', req.body.password);
+   next();
+   
+
+  
+});
+
+
 
  //der Server laueft auf port 3000
  app.listen(3000,"0.0.0.0",()=>{

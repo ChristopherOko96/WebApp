@@ -1,29 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Said</title>
+    <title>ConnectNow</title>
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/second.css">
 </head>
 <body>
-    <header class="header-main">
-            <div class="div1">
-                akufhaoif
-            </div>
-            <div class="div2">dvkubesb</div>
-            <div class="div3">wkuevnweoivnwpenewinv</div>
+    <header class="header-main"> 
+        <div class="name">
+            <a target="" href="secondpage.html" id="name">ConnectNow</a>
+        </div>
+        <nav class="nav">
+            <a href="#" onclick="showPage('loginPage')">Anmelden</a>
+            <a href="#" onclick="showPage('registerPage')">Registrieren</a>
+        </nav>
     </header>
-    <a class="meinp2" target="_blank" href="secondpage.html">Erste seite, homePage</a>
- 
-    <h1>Überschrift</h1>
-    <p id="meinp1">Das ist irgendein Text <br> </p>
-    <p class="meinp2 test">Das ist irgendein weiterer Text Das ist irgendein weiterer Text Das ist irgendein weiterer Text Das ist irgendein weiterer Text</p>
 
-    <div class="tester">
-        <a target="_blank" href="raum_b_oder_e.html"> Beitreten oder Erstellen seite</a>
+    <div id="homePage" class="page active">
+        <div class="body-left">
+            <h1>Willkommen</h1>
+        </div>
+        <div class="body-right">
+            <div class="login-container">
+                <button onclick="showPage('loginPage')">Anmelden</button>
+                <button onclick="showPage('registerPage')">Registrieren</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="loginPage" class="page">
+        <h2>Anmelden</h2>
+        <div class="login-data-input">  
+            <form action="/login" method="POST">
+                <p>Email</p>
+                <input id="loginMail" name="username" type="email" placeholder="E-Mail">
+                <p>Passwort</p>
+                <input id="loginPass" name="password" type="password" placeholder="Passwort">
+                <button type="submit" onclick="">Login</button>
+
+            </form>
+        </div>
     </div>
 
+    <div id="registerPage" class="page">
+        <h2>Registrieren</h2>
+        <div class="login-data-input">
+            <p>Email</p>
+            <input id="registerMail" type="email" placeholder="E-Mail">
+            <p>Passwort</p>
+            <input id="registerPass" type="password" placeholder="Passwort">
+            <a target="" href="raum_b_oder_e.html" onclick=" readData('registerMail','registerPass'), saveUsername()">Registrieren</a>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+    <script>
+        function saveUsername() {
+            const username = document.getElementById("loginMail").value;
+            if (username.trim() !== "") {
+                localStorage.setItem("username", username); // Benutzername speichern
+                window.location.href = "raum_b_oder_e.html"; // Zur nächsten Seite navigieren
+            } else {
+                alert("Bitte geben Sie einen Benutzernamen ein.");
+            }
+        }
+    </script>
 </body>
 </html>
