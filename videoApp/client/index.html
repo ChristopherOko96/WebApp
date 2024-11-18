@@ -58,7 +58,7 @@
                 <p>Passwort</p>
                 <input id="loginPass" type="password" placeholder="Passwort" name="passwort">
                 <!-- onclick= "loginUser entfernt damit an server daten übeertragen werden kann"-->
-                <button type="submit">Login </button>
+                <button type="submit" onclick="loginUser()">Login </button>
              </form>
         </div>
     </div>
@@ -118,18 +118,13 @@
         <div class="body-right video-section">
             <h2>Videobereich</h2>
             <div class="video-grid">
-                <div class="video-tile"></div>
-                <div class="video-tile"></div>
-                <div class="video-tile"></div>
-                <div class="video-tile"></div>
-                <div class="video-tile"></div>
-                <div class="video-tile"></div>
+               
             </div>
             <div class="controls">
-                <button onclick="toggleMic()">🎤</button>
-                <button onclick="toggleVideo()">📹</button>
-                <button onclick="shareScreen()">🖥️</button>
-                <button id="cancelCall" onclick="endCall()">📞</button>
+                <button id="toggleMicButton" onclick="toggleMic()">🎤 Aktiviert</button>
+                <button id="toggleVideoButton" onclick="toggleVideo()">📹 An</button>
+                <button onclick="shareScreen()">🖥️ Teilen</button>
+                <button id="cancelCall" onclick="endCall()">📞 Beenden</button>
             </div>
         </div>
     </div>

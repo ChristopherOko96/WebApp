@@ -36,6 +36,9 @@ body, html {
 .nav #username {
     color: white;
     margin-right: 20px;
+    background-color: dimgrey;
+    padding: 10px;
+    border-radius: 70%;
 }
 
 .nav a {
@@ -201,7 +204,11 @@ body, html {
     flex-direction: column;
     align-items: stretch;
     max-width: 500px;
-
+}
+.chat-section h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 .chat-box {
@@ -259,26 +266,41 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden; /* Kein Scrollen für den gesamten Bereich */
+}
+.video-section h2{
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Dynamische Spalten */
     gap: 10px;
     width: 100%;
+    max-height: 80vh; /* Begrenzung der Höhe */
+    overflow-y: auto; /* Scrollbar nur für die Videoelemente */
+    padding: 10px;
 }
 
 .video-tile {
-    background-color: blue;
-    height: 200px;
-    width: 450px;
-    padding-top: 50%;
+    background-color: black;
     position: relative;
-    border-radius: 50px;
+    border-radius: 8px;
     overflow: hidden;
-    margin: auto;
+    max-height: 300px; /* Feste Höhe für die Kacheln */
+    max-width: 300px;  /* Feste Breite für die Kacheln */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.video-tile video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Passt das Video an den Container an */
+}
 .video-tile::before {
     content: "";
     display: block;
@@ -300,6 +322,7 @@ body, html {
     border-radius: 50%;
     cursor: pointer;
     width: auto;
+    background-color: darkgray;
 }
 
 #cancelCall {
