@@ -35,6 +35,7 @@ function enterRoom(action) {
         alert('Raum beitreten...');
     }
     showPage('roomPage'); // Zur Raumansicht wechseln
+    document.getElementById("abmeldeButton").style.display="none";
     startMedia();
 }
 
@@ -42,13 +43,6 @@ function enterRoom(action) {
 function leaveRoom() {
     showPage('homePage'); // Zurück zur Hauptseite wechseln
 }
-
-// Funktion zum Abmelden
-function logout() {
-    alert('Abmelden...');
-    showPage('homePage'); // Zurück zur Hauptseite nach dem Abmelden
-}
-
 
 function addVideoTile(stream, isMuted = false) {
     // Finde die Video-Grid-Container
@@ -75,9 +69,6 @@ function addVideoTile(stream, isMuted = false) {
     return videoTile; // Gibt die `video-tile` zurück, falls benötigt
 }
 
-
-
-
 // Starte die Video- und Audioaufnahme
 async function startMedia() {
     try {
@@ -94,8 +85,29 @@ async function startMedia() {
     }
 }
 
+function cancelVideoScreen(){
+    if (localStream) {
+        // Stoppe alle Tracks des lokalen Streams
+        localStream.getTracks().forEach(track => track.stop());
 
+        // Finde das Video-Tile, das den lokalen Stream anzeigt
+        const videoGrid = document.querySelector('.video-grid');
+        const localTile = Array.from(videoGrid.children).find(tile =>
+            tile.querySelector('video')?.srcObject === localStream
+        );
 
+        // Entferne das Video-Tile
+        if (localTile) {
+            removeVideoTile(localTile);
+        }
+
+        // Setze den lokalen Stream zurück
+        localStream = null;
+        console.log("Kamera und Mikrofon ausgeschaltet.");
+    } else {
+        console.log("Kein lokaler Stream zum Ausschalten.");
+    }
+}
 
 // Video- und Chatfunktionen
 function toggleMic() {
@@ -132,9 +144,28 @@ function toggleVideo() {
 }
 
 async function shareScreen() {
-    const videoGrid = document.querySelector('.video-grid');
-    // Überprüfen, ob bereits ein Bildschirm geteilt wird
+    // Überprüfen, ob bereits ein Bildschirm geteilt wird, falls ja teilen wird beendet
     if (isStreaming && screenStream) {
+    cancelSharingScreen();
+    }else{
+        try {
+            screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+            // Füge den Bildschirmstream in einer `video-tile` hinzu
+            addVideoTile(screenStream);
+            isStreaming = true;
+            console.log("Screensharing gestartet.");
+        } catch (error) {
+            console.error("Fehler beim Starten von Screensharing:", error);
+            alert("Bitte erlaube den Zugriff auf den Bildschirm.");
+        }
+    }
+}
+
+function cancelSharingScreen(){
+    if(!isStreaming){
+        return;
+    }
+    const videoGrid = document.querySelector('.video-grid');
         // Beende den Stream
         screenStream.getTracks().forEach(track => track.stop());
         // Entferne das zugehörige Video-Tile
@@ -142,9 +173,7 @@ async function shareScreen() {
             tile.querySelector('video')?.srcObject === screenStream
         );
         
-        if (screenTile) {
-            screenTile.remove();
-        }
+        removeVideoTile(screenTile);
 
         // Setze den Status zurück
         screenStream = null;
@@ -153,17 +182,6 @@ async function shareScreen() {
         console.log("Screensharing beendet.");
         alert("teilen beendet ...");
         return;
-    }
-    try {
-        screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-        // Füge den Bildschirmstream in einer `video-tile` hinzu
-        addVideoTile(screenStream);
-        isStreaming = true;
-        console.log("Screensharing gestartet.");
-    } catch (error) {
-        console.error("Fehler beim Starten von Screensharing:", error);
-        alert("Bitte erlaube den Zugriff auf den Bildschirm.");
-    }
 }
 
     
@@ -174,10 +192,13 @@ function removeVideoTile(tile) {
     }
 }
 
-
+// Anruf beenden
 function endCall() {
+    cancelSharingScreen();
+    cancelVideoScreen();
     alert("Anruf beenden");
     showPage('afterLogin');
+    document.getElementById("abmeldeButton").style.display="inline";
 }
 
 // Chatfunktion
@@ -193,14 +214,14 @@ function sendMessage() {
         document.getElementById("chatMessage").value = "";
     }
 }
-
+// Enter Taste für Chatfunktion
 document.getElementById("chatMessage")?.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
         sendMessage();
     }
 });
-
+// Funktion zum Abmelden
 function logout() {
     localStorage.removeItem("username");
     document.getElementById("username").style.display = "none";

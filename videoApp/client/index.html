@@ -141,53 +141,5 @@
 
 
     <script src="script.js"></script>
-    <script>
-    
-        function logout() {
-            localStorage.removeItem("username");
-            document.getElementById("username").style.display = "none";
-            localStorage.removeItem("usernameUnterWilkommen");
-            document.getElementById("usernameUnterWilkommen").style.display = "none";
-            document.getElementById("abmeldeButton").style.display="none";
-            showPage('homePage');
-        }
-
-        function loginUser() {
-            const username = document.getElementById("usernameInputFeld").value;
-            const mailadresse = document.getElementById("loginMail").value;
-            if (username != "" && mailadresse != "") {
-                document.getElementById("username").textContent = username;
-                document.getElementById("username").style.display = "inline";
-                document.getElementById("usernameUnterWilkommen").textContent = username;
-                document.getElementById("usernameUnterWilkommen").style.display = "inline";
-                document.getElementById("abmeldeButton").style.display="inline";
-
-                showPage('afterLogin');
-            }else{
-                
-                alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
-            }
-
-            
-        }
-
-        function registerUser() {
-            const username = document.getElementById("usernameInputFeldReg").value;
-            const mailadresse = document.getElementById("registerMail").value;
-            if (username != "" && mailadresse != "") {
-                document.getElementById("username").textContent = username;
-                document.getElementById("username").style.display = "inline";
-                document.getElementById("usernameUnterWilkommen").textContent = username;
-                document.getElementById("usernameUnterWilkommen").style.display = "inline";
-                document.getElementById("abmeldeButton").style.display="inline";
-
-                showPage('afterLogin');
-            }else{
-                
-                alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
-            }
-
-        }
-    </script>
 </body>
 </html>
