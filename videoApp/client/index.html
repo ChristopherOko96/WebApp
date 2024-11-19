@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+    <!-- Header -->
     <header class="header-main"> 
         <div class="name">
             <a target="" href="#" id="name" onclick="showPage('afterLogin')">ConnectNow</a>
@@ -17,7 +18,7 @@
             <a  id="abmeldeButton" onclick="logout()" style="display: none;">Abmelden</a>
         </nav>
     </header>
-
+    <!-- Die erste Seite -->
     <div id="homePage" class="page active">
         <div class="body-left">
             <h1>Willkommen</h1>
@@ -29,7 +30,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Raum-Erstellen/Beitreten-Seite -->
     <div id="afterLogin" class="page">
         <div class="body-left">
             <h1>Willkommen</h1>
@@ -44,8 +45,7 @@
             </div>
         </div>
     </div>
-
-<!--Anmelden (Startseite) in den User -->
+    <!--Anmelden (Startseite) in den User -->
     <div id="loginPage" class="page">
         <h2>Anmelden</h2>
         
@@ -62,7 +62,7 @@
              </form>
         </div>
     </div>
-
+    <!-- Registrierungsseite -->
     <div id="registerPage" class="page">
         <h2>Registrieren</h2>
         <div class="login-data-input">
@@ -75,7 +75,7 @@
             <button onclick="registerUser()">Registrieren</button>
         </div>
     </div>
-
+    <!-- Raum-Erstellen-Seite -->
     <div id="createPage" class="page">
         <div class="body-left">
             <h1>Raum erstellen</h1>
@@ -88,7 +88,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Raum-Beitreten-Seite -->
     <div id="joinPage" class="page">
         <div class="body-left">
             <h1>Raum beitreten</h1>
@@ -103,7 +103,7 @@
             </div>
         </div>
     </div>
-
+    <!-- Raumansicht mit Chat und Video -->
     <div id="roomPage" class="page">
         <div class="body-left chat-section">
             <h2>Chatbereich</h2>
@@ -128,17 +128,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Hauptcontainer für alle Seiten -->
-
-    <!-- Anmeldeseite -->
-    <!-- Registrierungsseite -->
-    <!-- Raum-Erstellen/Beitreten-Seite -->
-    <!-- Raum-Erstellen-Seite -->
-    <!-- Raum-Beitreten-Seite -->
-    <!-- Raumansicht mit Chat und Video -->
-
-
 
     <script src="script.js"></script>
 </body>
