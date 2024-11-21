@@ -251,6 +251,7 @@ function loginUser() {
     
 }
 
+/*
 function registerUser() {
     const username = document.getElementById("usernameInputFeldReg").value;
     const mailadresse = document.getElementById("registerMail").value;
@@ -268,6 +269,40 @@ function registerUser() {
     }
 
 }
+    */
+   async function registerUser() {
+    const username = document.getElementById("usernameInputFeldReg").value;
+    const email = document.getElementById("registerMail").value;
+    const password = document.getElementById("registerPass").value;
+
+    if (!username || !email || !password) {
+        alert("Bitte alle Felder ausfüllen!");
+        return;
+    }
+
+    try {
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, email, password }),
+        });
+
+        const result = await response.text();
+
+        if (response.ok) {
+            alert(result);
+            showPage("loginPage");
+        } else {
+            alert("Fehler bei der Registrierung: " + result);
+        }
+    } catch (error) {
+        console.error("Fehler bei der Registrierung:", error);
+        alert("Ein Fehler ist aufgetreten. Bitte später erneut versuchen.");
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const username = localStorage.getItem("username");
