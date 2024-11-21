@@ -1,76 +1,64 @@
- //https://www.youtube.com/watch?v=HLbtNPcGVNo&list=PLNmsVeXQZj7ogA_q-mOoYH3dDQIh8B3Oe&index=7
- //video 7
+// Module laden
+const express = require("express");
+const path = require("path");
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
 
+// Firebase initialisieren
+const serviceAccount = require("./connect_now_pk.json"); // Deine Service-Account-JSON-Datei
+const adminApp = initializeApp({
+  credential: cert(serviceAccount),
+});
+const db = getFirestore();
 
- //holen des Moduls express
- const express = require("express");
+// Express-App initialisieren
+const app = express();
 
-
-
-// Lädt das eingebaute "path"-Modul, das Funktionen zum Arbeiten mit Dateipfaden bietet.
- const path =require("path");
-const { nextTick } = require("process");
-const { SourceTextModule } = require("vm");
-
- //es wird eine Instanz des Express aufgesetzt
- const app= express(); 
-
-//Stellt statische Dateien aus dem Ordner "public" bereit, z. B. für CSS, JS, Bilder.
-//man kann die html datei besser verküpfen guck index.html durch . ist es im root
+// Statische Dateien bereitstellen
 app.use(express.static(path.join(__dirname, "..", "..", "client")));
 
- 
+// Middleware für Formulardaten und JSON-Daten
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-
-
- /*der erste Parameter gibt an an welche verzeichnis er es schicken soll
- bedeutet wenn ich * habe kann ich localhost/fewfefwef schreiben
-    es wird an alle verzeichnisse gesendet 
- die methode all gibt an egal welche Methode Post,get,put...
- es reagiert auf alle Methoden
-*/
-//Die Methoden werden auch CRUD Methode genannt: Create, Read, Update, Delete
-
-//Read
- /*app.get("/",(req,res) =>{
-   //gib den Pfad aus
-    console.log("Pfad ist:  "+path.join(__dirname))
-    //es wird ein file gesendet
-    res.sendFile(path.join(__dirname)+"/index.html");
- });
- */ 
-
-
-
+// Route für die Startseite
 app.get("/", (req, res) => {
-   res.sendFile(path.join(__dirname,"..","..", "client", "index.html"));
-  console.log(path.join(__dirname));
+  res.sendFile(path.join(__dirname, "..", "..", "client", "index.html"));
+  console.log("Serving file from:", path.join(__dirname));
 });
 
+// Route für das Login - Speichert Benutzerdaten in Firestore
+app.post("/login", async (req, res) => {
+  try {
+    const { username, loginMail, passwort } = req.body;
 
+    // Überprüfen, ob alle Felder vorhanden sind
+    if (!username || !loginMail || !passwort) {
+      return res.status(400).send("Alle Felder sind erforderlich!");
+    }
 
+    console.log("Login-Daten empfangen:");
+    console.log("Benutzername:", username);
+    console.log("E-Mail:", loginMail);
+    console.log("Passwort:", passwort);
 
+    // Daten in Firestore speichern
+    const userRef = db.collection("users").doc(username);
+    await userRef.set({
+      username: username,
+      email: loginMail,
+      password: passwort,
+      createdAt: new Date(),
+    });
 
-app.use(express.urlencoded({ extended: true })); // Für URL-codierte Daten (Formulardaten)
-app.use(express.json()); // Für JSON-Daten
-
-// Route für das Login
-app.post('/login', (req, res) => {
-   const { username,loginMail, passwort } = req.body; // Extrahiert Benutzername und Passwort
-   console.log("hallo");
-   console.log('loginUser:', username);
-   console.log('loginMail:', loginMail);
-   console.log("logiPasswort",passwort )
-   next();
-   
-
-  
+    console.log("Daten erfolgreich in Firestore gespeichert.");
+  } catch (error) {
+    console.error("Fehler beim Speichern der Daten:", error);
+  }
 });
 
+// Server starten
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server listen on port 3000");
+});
 
-
- //der Server laueft auf port 3000
- app.listen(3000,"0.0.0.0",()=>{
-    console.log("Server listen on port 3000");
- });
- 
