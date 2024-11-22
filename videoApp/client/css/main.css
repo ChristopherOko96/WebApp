@@ -54,20 +54,11 @@ body, html {
     color: #007bff;
 }
 
-/* Seitenanzeige */
-.page {
-    display: none;
-    flex: 1;
-    flex-direction: row;
-}
-
-.page.active {
-    display: flex;
-}
 
 /* Hauptseite */
 #homePage, #afterLogin, #createPage, #joinPage, #roomPage{
     height: calc(100vh - 60px);
+    display: flex;
 }
 
 .body-left {

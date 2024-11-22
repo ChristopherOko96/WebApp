@@ -3,45 +3,35 @@ let isMicMuted = false; // Status des Mikrofons
 let isVideoOff = false; // Status der Kamera
 let isStreaming = false;
 let screenStream;
+let username = "nix";
+let mailadresse ="nix";
 
 
+function getName(){
 
-// Funktion zum Anzeigen der gewünschten Seite
-function showPage(pageId) {
-    // Alle Seiten ausblenden
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-
-    // Gewählte Seite anzeigen
-    document.getElementById(pageId).classList.add('active');
+    return localStorage.getItem("username");
 }
-
-
-// Funktion zum Lesen von Eingabedaten
-function readData(mail, passwort) {
-    const mailInhalt = document.getElementById(mail)?.value || "";
-    const passwortInhalt = document.getElementById(passwort)?.value || "";
-    console.log("Email:", mailInhalt);
-    console.log("Passwort:", passwortInhalt);
-    return { mailInhalt, passwortInhalt };
-}
-
 // Funktion zum Erstellen oder Beitreten eines Raums
 function enterRoom(action) {
+    
+    console.log("Benutzername und E-Mail gespeichert:", localStorage.getItem("username"), localStorage.getItem("email"));
+
+
     if (action === 'create') {
         alert('Raum wird erstellt...');
+        
     } else if (action === 'join') {
         alert('Raum beitreten...');
+        
     }
-    showPage('roomPage'); // Zur Raumansicht wechseln
+    window.location.href = "roomPage.html";
     document.getElementById("abmeldeButton").style.display="none";
     startMedia();
 }
 
 // Funktion zum Verlassen eines Raums
 function leaveRoom() {
-    showPage('homePage'); // Zurück zur Hauptseite wechseln
+    alert("Raum verlassen....");
 }
 
 function addVideoTile(stream, isMuted = false) {
@@ -197,7 +187,6 @@ function endCall() {
     cancelSharingScreen();
     cancelVideoScreen();
     alert("Anruf beenden");
-    showPage('afterLogin');
     document.getElementById("abmeldeButton").style.display="inline";
 }
 
@@ -228,20 +217,21 @@ function logout() {
     localStorage.removeItem("usernameUnterWilkommen");
     document.getElementById("usernameUnterWilkommen").style.display = "none";
     document.getElementById("abmeldeButton").style.display="none";
-    showPage('homePage');
 }
 
 function loginUser() {
-    const username = document.getElementById("usernameInputFeld").value;
-    const mailadresse = document.getElementById("loginMail").value;
+    console.log("Das ist die Methode loginUser");
+    username = document.getElementById("usernameInputFeld").value;
+    mailadresse = document.getElementById("loginMail").value;
     if (username != "" && mailadresse != "") {
-        document.getElementById("username").textContent = username;
-        document.getElementById("username").style.display = "inline";
-        document.getElementById("usernameUnterWilkommen").textContent = username;
-        document.getElementById("usernameUnterWilkommen").style.display = "inline";
-        document.getElementById("abmeldeButton").style.display="inline";
+        // Speichere den Benutzernamen und die E-Mail im localStorage
+        localStorage.setItem("username", username);
+        localStorage.setItem("email", mailadresse);
 
-        showPage('afterLogin');
+        console.log("Benutzername und E-Mail gespeichert:", username, mailadresse);
+
+        // Wechsle zur afterLogin.html
+        window.location.href = "afterLogin.html";
     }else{
         
         alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
@@ -251,8 +241,8 @@ function loginUser() {
 }
 
 function registerUser() {
-    const username = document.getElementById("usernameInputFeldReg").value;
-    const mailadresse = document.getElementById("registerMail").value;
+    username = document.getElementById("usernameInputFeldReg").value;
+    mailadresse = document.getElementById("registerMail").value;
     if (username != "" && mailadresse != "") {
         document.getElementById("username").textContent = username;
         document.getElementById("username").style.display = "inline";
@@ -260,24 +250,10 @@ function registerUser() {
         document.getElementById("usernameUnterWilkommen").style.display = "inline";
         document.getElementById("abmeldeButton").style.display="inline";
 
-        showPage('afterLogin');
     }else{
         
         alert("FEHLER!!!  FELDER NICHT LEER LASSEN");
     }
 
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const username = localStorage.getItem("username");
-    if (username) {
-        document.getElementById("username").textContent = username;
-        document.getElementById("username").style.display = "inline";
-
-        // Kamera und Mikrofon starten
-        startMedia();
-    } else {
-        showPage('homePage');
-    }
-});
 
