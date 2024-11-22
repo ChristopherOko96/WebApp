@@ -1,76 +1,121 @@
- //https://www.youtube.com/watch?v=HLbtNPcGVNo&list=PLNmsVeXQZj7ogA_q-mOoYH3dDQIh8B3Oe&index=7
- //video 7
+const express = require("express");
+const path = require("path");
+const { initializeApp, cert } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
+const { getFirestore } = require("firebase-admin/firestore");
+const nodemailer = require("nodemailer");
 
+// Firebase initialisieren
+const serviceAccount = require("./connect_now_pk.json");
+initializeApp({
+  credential: cert(serviceAccount),
+});
 
- //holen des Moduls express
- const express = require("express");
+const db = getFirestore();
+const app = express();
 
+// Middleware für Formulardaten und JSON-Daten
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-
-// Lädt das eingebaute "path"-Modul, das Funktionen zum Arbeiten mit Dateipfaden bietet.
- const path =require("path");
-const { nextTick } = require("process");
-const { SourceTextModule } = require("vm");
-
- //es wird eine Instanz des Express aufgesetzt
- const app= express(); 
-
-//Stellt statische Dateien aus dem Ordner "public" bereit, z. B. für CSS, JS, Bilder.
-//man kann die html datei besser verküpfen guck index.html durch . ist es im root
+// Statische Dateien bereitstellen
 app.use(express.static(path.join(__dirname, "..", "..", "client")));
 
- 
 
 
-
- /*der erste Parameter gibt an an welche verzeichnis er es schicken soll
- bedeutet wenn ich * habe kann ich localhost/fewfefwef schreiben
-    es wird an alle verzeichnisse gesendet 
- die methode all gibt an egal welche Methode Post,get,put...
- es reagiert auf alle Methoden
-*/
-//Die Methoden werden auch CRUD Methode genannt: Create, Read, Update, Delete
-
-//Read
- /*app.get("/",(req,res) =>{
-   //gib den Pfad aus
-    console.log("Pfad ist:  "+path.join(__dirname))
-    //es wird ein file gesendet
-    res.sendFile(path.join(__dirname)+"/index.html");
- });
- */ 
-
-
-
-app.get("/", (req, res) => {
-   res.sendFile(path.join(__dirname,"..","..", "client", "index.html"));
-  console.log(path.join(__dirname));
+// Nodemailer-Konfiguration für Outlook
+const transporter = nodemailer.createTransport({
+  host: "smtp.office365.com", // SMTP-Server für Outlook
+  port: 587,
+  secure: false,
+  auth: {
+    user: "deine-outlook-email@outlook.de", // Deine Outlook-E-Mail-Adresse
+    pass: "dein-outlook-passwort", // Passwort oder App-spezifisches Passwort
+  },
+  tls: {
+   rejectUnauthorized:false,// Für Testzwecke deaktivieren wir die TLS Validierung
+  }
 });
 
+// Funktion zum Senden der Verifizierungs-E-Mail
+const sendVerificationEmail = async (email, verificationLink) => {
+  const mailOptions = {
+    from: "deine-outlook-email@outlook.de",
+    to: email,
+    subject: "Bitte E-Mail verifizieren",
+    html: `<p>Klicken Sie auf den folgenden Link, um Ihre E-Mail zu verifizieren:</p>
+           <a href="${verificationLink}">${verificationLink}</a>`,
+  };
 
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Verifizierungs-E-Mail an ${email} gesendet.`);
+  } catch (error) {
+    console.error("Fehler beim Senden der E-Mail:", error);
+    throw new Error("E-Mail konnte nicht gesendet werden.");
+  }
+};
 
+// Route für Registrierung
+app.post("/register", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    console.log("Empfangene Daten:", req.body);
 
+    if (!username || !email || !password) {
+      return res.status(400).send("Alle Felder sind erforderlich!");
+    }
 
-app.use(express.urlencoded({ extended: true })); // Für URL-codierte Daten (Formulardaten)
-app.use(express.json()); // Für JSON-Daten
+    // Benutzer in Firebase Authentication erstellen
+    const userRecord = await getAuth().createUser({
+      email: email,
+      emailVerified: false,
+      password: password,
+      displayName: username,
+    });
+
+    console.log("Benutzer erstellt:", userRecord.uid);
+
+    // Verifizierungslink generieren
+    const verificationLink = await getAuth().generateEmailVerificationLink(email);
+
+    // Verifizierungs-E-Mail senden
+    await sendVerificationEmail(email, verificationLink);
+
+    res.status(200).send("Benutzer erfolgreich registriert. Bitte überprüfen Sie Ihre E-Mail!");
+  } catch (error) {
+    console.error("Fehler bei der Registrierung:", error);
+    res.status(500).send("Fehler bei der Registrierung.");
+  }
+});
 
 // Route für das Login
-app.post('/login', (req, res) => {
-   const { username,loginMail, passwort } = req.body; // Extrahiert Benutzername und Passwort
-   console.log("hallo");
-   console.log('loginUser:', username);
-   console.log('loginMail:', loginMail);
-   console.log("logiPasswort",passwort )
-   next();
-   
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  
+    if (!email || !password) {
+      return res.status(400).send("E-Mail und Passwort sind erforderlich!");
+    }
+
+    // Benutzer aus Firebase Auth abrufen
+    const user = await getAuth().getUserByEmail(email);
+
+    // Verifizierungsstatus prüfen
+    if (!user.emailVerified) {
+      return res.status(403).send("Bitte verifizieren Sie Ihre E-Mail-Adresse, um sich einzuloggen!");
+    }
+
+    // Zugriff gewähren
+    res.status(200).send("Login erfolgreich. Willkommen zurück!");
+  } catch (error) {
+    console.error("Fehler beim Login:", error);
+    res.status(500).send("Fehler beim Login.");
+  }
 });
 
-
-
- //der Server laueft auf port 3000
- app.listen(3000,"0.0.0.0",()=>{
-    console.log("Server listen on port 3000");
- });
- 
+// Server starten
+const PORT = 3000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server läuft auf http://localhost:${PORT}`);
+});
