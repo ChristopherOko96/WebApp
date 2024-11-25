@@ -28,7 +28,6 @@ function enterRoom(action) {
     }
     window.location.href = "roomPage.html";
     document.getElementById("abmeldeButton").style.display="none";
-    startMedia();
 }
 
 // Funktion zum Verlassen eines Raums
@@ -119,6 +118,7 @@ function toggleMic() {
 }
 
 function toggleVideo() {
+    
     if (!localStream) {
         alert("Der Videostream ist noch nicht gestartet.");
         return;
@@ -198,7 +198,7 @@ function sendMessage() {
     const chatMessage = document.getElementById("chatMessage").value;
     if (chatMessage.trim() !== "") {
         const messageElement = document.createElement("div");
-        messageElement.textContent = document.getElementById("usernameInputFeld").value+" : \n" + chatMessage;
+        messageElement.textContent = getName() +" : \n" + chatMessage;
         messageElement.classList.add("chat-message");
         chatBox.appendChild(messageElement);
         chatBox.scrollTop = chatBox.scrollHeight;
